@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Dtos.Stock;
 using API.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace API.Controllers
             _context = context;
         }
         [HttpGet]
-        public ActionResult GetAll()
+        public IActionResult GetAll()
         {
             var stocks = _context.Stocks.ToList().Select(r => r.ToStockDto());
 
@@ -22,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetOneById([FromRoute]int id) //-> route from httpget, which is id 
+        public IActionResult GetOneById([FromRoute]int id) //-> route from httpget, which is id 
         {
             var stock = _context.Stocks.Find(id);
             if(stock == null)
@@ -31,6 +32,16 @@ namespace API.Controllers
             }
 
             return Ok(stock.ToStockDto());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateStockRequestDto stockDto) //-> data will be sent in Json no url, so we need the fromBody to pass it through the body of the http 
+        {
+            var stockModel = stockDto.FromStockToCreateDto();
+            _context.Stocks.Add(stockModel);    
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetOneById), new {Id = stockModel.Id}, stockModel.ToStockDto());
         }
 
     }
