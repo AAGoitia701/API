@@ -69,7 +69,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id, DeleteStockRequestDto deleteStockDto) 
+        public IActionResult Delete([FromRoute] int id) 
         {
             var stockModel = _context.Stocks.FirstOrDefault(re => re.Id == id);
             if(stockModel == null)
@@ -77,17 +77,11 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            stockModel.Purchase = deleteStockDto.Purchase;
-            stockModel.Symbol = deleteStockDto.Symbol;
-            stockModel.MarketCap = deleteStockDto.MarketCap;
-            stockModel.CompanyName = deleteStockDto.CompanyName;
-            stockModel.Industry = deleteStockDto.Industry;
-            stockModel.LastDiv = deleteStockDto.LastDiv;
 
             _context.Stocks.Remove(stockModel);
             _context.SaveChanges(true);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
