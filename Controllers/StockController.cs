@@ -44,5 +44,50 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetOneById), new {Id = stockModel.Id}, stockModel.ToStockDto());
         }
 
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody]UpdateStockRequestDto updateStockDto)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(r => r.Id == id);
+            if(stockModel == null)
+            {
+                return NotFound();
+            }
+            
+            stockModel.Purchase = updateStockDto.Purchase;
+            stockModel.Symbol = updateStockDto.Symbol;
+            stockModel.MarketCap = updateStockDto.MarketCap;
+            stockModel.CompanyName = updateStockDto.CompanyName;
+            stockModel.Industry = updateStockDto.Industry;
+            stockModel.LastDiv = updateStockDto.LastDiv;
+            
+            _context.Stocks.Update(stockModel);
+            _context.SaveChanges(true);
+
+            return Ok(stockModel.ToStockDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id, DeleteStockRequestDto deleteStockDto) 
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(re => re.Id == id);
+            if(stockModel == null)
+            {
+                return NotFound();
+            }
+
+            stockModel.Purchase = deleteStockDto.Purchase;
+            stockModel.Symbol = deleteStockDto.Symbol;
+            stockModel.MarketCap = deleteStockDto.MarketCap;
+            stockModel.CompanyName = deleteStockDto.CompanyName;
+            stockModel.Industry = deleteStockDto.Industry;
+            stockModel.LastDiv = deleteStockDto.LastDiv;
+
+            _context.Stocks.Remove(stockModel);
+            _context.SaveChanges(true);
+
+            return Ok();
+        }
     }
 }

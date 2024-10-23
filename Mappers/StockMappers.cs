@@ -29,5 +29,6 @@ namespace API.Mappers
                 Symbol = stockDto.Symbol,
             };
         }
+
     }
 }
