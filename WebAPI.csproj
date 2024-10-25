@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Comment\" />
+    <ProjectReference Include="..\API.Models\API.Models.csproj" />
   </ItemGroup>
 
 </Project>
