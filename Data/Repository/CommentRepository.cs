@@ -62,7 +62,6 @@ namespace API.Repository
             }
 
             commentModel.Title = updateComDto.Title;
-            commentModel.CreatedOn = updateComDto.CreatedOn;
             commentModel.Content = updateComDto.Content;
 
             await _context.SaveChangesAsync();

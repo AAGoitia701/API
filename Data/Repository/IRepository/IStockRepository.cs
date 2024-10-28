@@ -12,6 +12,8 @@ namespace API.Repository.IRepository
 
         Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto updateStockDto);
 
-        Task<Stock?> DeleteAsync(int id);  
+        Task<Stock?> DeleteAsync(int id);
+
+        Task<bool> StockExist(int id);
     }
 }

@@ -11,10 +11,12 @@ namespace API.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentRepository _commentRepo;
+        private readonly IStockRepository _stockRepo;
 
-        public CommentController(ICommentRepository comRepo)
+        public CommentController(ICommentRepository comRepo, IStockRepository IStockRepo)
         {
             _commentRepo = comRepo;
+            _stockRepo = IStockRepo;
         }
 
         [HttpGet]
@@ -38,14 +40,19 @@ namespace API.Controllers
             return Ok(oneComment);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCommentRequestDto commentDto)
+        [HttpPost("{stockId}")]
+        public async Task<IActionResult> Create([FromRoute] int stockId,[FromBody] CreateCommentRequestDto commentDto)
         {
-            var commentModel = commentDto.FromCreateToComment();
+            if(! await _stockRepo.StockExist(stockId))
+            {
+                return BadRequest("The stock doesn't exist");
+            }
+
+            var commentModel = commentDto.FromCreateToComment(stockId);
 
             await _commentRepo.CreateAsync(commentModel);
 
-            return Ok(commentModel);
+            return CreatedAtAction(nameof(GetOne), new {id = commentModel.Id}, commentModel.ToCommentDto());
         }
 
         [HttpDelete]
@@ -68,7 +75,7 @@ namespace API.Controllers
             var commentModel = await _commentRepo.UpdateAsync(id, commentDto);
             if(commentModel == null)
             {
-                return NotFound();
+                return NotFound("Comment not found");
             }
 
             return Ok(commentModel.ToCommentDto());
