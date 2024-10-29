@@ -3,6 +3,7 @@ using API.Dtos.Stock;
 using API.Models;
 using API.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Helpers;
 namespace API.Repository
 {
     public class StockRepository : IStockRepository
@@ -35,9 +36,21 @@ namespace API.Repository
             return stockModel;
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            return await _context.Stocks.Include(r => r.Comments).ToListAsync();
+            var stocks = _context.Stocks.Include(r => r.Comments).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName)) 
+            {
+                stocks = stocks.Where(r => r.CompanyName.Contains(query.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                stocks = stocks.Where(r => r.Symbol.Contains(query.Symbol));   
+            }
+
+            return await stocks.ToListAsync();  
         }
 
         public async Task<Stock> GetOneByIdAsync(int id)

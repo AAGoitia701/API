@@ -5,6 +5,7 @@ using API.Repository;
 using API.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Helpers;
 
 namespace API.Controllers
 {
@@ -20,9 +21,9 @@ namespace API.Controllers
             _stockRepo = stockRepo;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllAsync(query);
 
             var stocks2 = stocks
                 .Select(r => r.ToStockDto());
