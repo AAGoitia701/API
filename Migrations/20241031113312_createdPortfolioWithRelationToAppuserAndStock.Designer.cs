@@ -4,6 +4,7 @@ using API.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241031113312_createdPortfolioWithRelationToAppuserAndStock")]
+    partial class createdPortfolioWithRelationToAppuserAndStock
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,13 +197,13 @@ namespace API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b34e23ec-cdbc-4ad4-a1a1-f8369f516e2b",
+                            Id = "4b640957-bbbb-4981-93a5-6156e61c41f3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ec3e1e6f-3b2a-4dd4-bcc9-a59e918a73a7",
+                            Id = "891d8826-5852-4dd7-8e32-058eb07b4452",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -4,6 +4,7 @@ using API.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029180902_AddedIdentity")]
+    partial class AddedIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,21 +119,6 @@ namespace API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("API.Models.Models.Portfolio", b =>
-                {
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("StockId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AppUserId", "StockId");
-
-                    b.HasIndex("StockId");
-
-                    b.ToTable("Portfolios");
-                });
-
             modelBuilder.Entity("API.Models.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -190,20 +178,6 @@ namespace API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "b34e23ec-cdbc-4ad4-a1a1-f8369f516e2b",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "ec3e1e6f-3b2a-4dd4-bcc9-a59e918a73a7",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -321,25 +295,6 @@ namespace API.Migrations
                     b.Navigation("Stock");
                 });
 
-            modelBuilder.Entity("API.Models.Models.Portfolio", b =>
-                {
-                    b.HasOne("API.Models.Models.AppUser", "AppUser")
-                        .WithMany("PortfolioList")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.Stock", "Stock")
-                        .WithMany("PortfolioList")
-                        .HasForeignKey("StockId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Stock");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -391,16 +346,9 @@ namespace API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Models.Models.AppUser", b =>
-                {
-                    b.Navigation("PortfolioList");
-                });
-
             modelBuilder.Entity("API.Models.Stock", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("PortfolioList");
                 });
 #pragma warning restore 612, 618
         }

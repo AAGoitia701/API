@@ -3,6 +3,7 @@ using API.Dtos.Stock;
 using API.Mappers;
 using API.Repository;
 using API.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Helpers;
@@ -21,6 +22,7 @@ namespace API.Controllers
             _stockRepo = stockRepo;
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             var stocks = await _stockRepo.GetAllAsync(query);
@@ -32,6 +34,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetOneById([FromRoute]int id) //-> route from httpget, which is id 
         {
             var stock = await _stockRepo.GetOneByIdAsync(id); 
@@ -44,6 +47,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto) //-> data will be sent in Json no url, so we need the fromBody to pass it through the body of the http 
         {
             var stockModel = stockDto.FromStockToCreateDto();
@@ -55,6 +59,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody]UpdateStockRequestDto updateStockDto)
         {
             
@@ -65,6 +70,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id) 
         {
             var stockModel = await _stockRepo.DeleteAsync(id);
