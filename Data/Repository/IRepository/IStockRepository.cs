@@ -8,6 +8,7 @@ namespace API.Repository.IRepository
     {
         Task<List<Stock>> GetAllAsync(QueryObject query);
         Task<Stock?> GetOneByIdAsync(int id);
+        Task<Stock> GetBySymbolAsync(string symbol);
 
         Task<Stock> CreateAsync(Stock stock);
 

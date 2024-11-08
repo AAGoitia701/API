@@ -2,6 +2,7 @@
 using API.Dtos.Stock;
 using API.Models;
 using API.Repository.IRepository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Helpers;
 namespace API.Repository
@@ -100,6 +101,16 @@ namespace API.Repository
         public async Task<bool> StockExist(int id)
         {
             return await _context.Stocks.AnyAsync(r => r.Id == id);
+        }
+
+        public async Task<Stock> GetBySymbolAsync(string symbol)
+        {
+            var stock = await _context.Stocks.FirstOrDefaultAsync(r => r.Symbol.Equals(symbol));
+            if (stock == null)
+            {
+                return null;
+            }
+            return stock;
         }
     }
 }
