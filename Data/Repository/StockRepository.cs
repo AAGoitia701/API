@@ -39,7 +39,7 @@ namespace API.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            var stocks = _context.Stocks.Include(r => r.Comments).AsQueryable();
+            var stocks = _context.Stocks.Include(r => r.Comments).ThenInclude(c => c.AppUser).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.CompanyName)) 
             {

@@ -27,10 +27,10 @@ namespace API.Controllers
         {
             var stocks = await _stockRepo.GetAllAsync(query);
 
-            var stocks2 = stocks
-                .Select(r => r.ToStockDto());
+            var stocksDto = stocks
+                .Select(r => r.ToStockDto()).ToList();
 
-            return Ok(stocks2);
+            return Ok(stocksDto);
         }
 
         [HttpGet("{id:int}")]
